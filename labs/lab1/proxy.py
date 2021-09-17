@@ -14,9 +14,9 @@ def client_thread(clientFacingSocket):
     try:
         message = clientFacingSocket.recv(4096).decode()
         msgElements = message.split()
-        
+
         if len(msgElements) < 5 or msgElements[0].upper() != 'GET' or 'Range:' in msgElements:
-            # print("non-supported request: " , msgElements)
+            print("Non-supported request: ", msgElements)
             clientFacingSocket.close()
             return
 
@@ -24,15 +24,15 @@ def client_thread(clientFacingSocket):
         #   webServer: the web server's host name
         #   resource: the web resource requested
         #   file_to_use: a valid file name to cache the requested resource
-        #   Assume the HTTP reques is in the format of:
+        #   Assume the HTTP request is in the format of:
         #      GET http://www.mit.edu/ HTTP/1.1\r\n
         #      Host: www.mit.edu\r\n
         #      User-Agent: .....
         #      Accept:  ......
 
-        
+
         resource = msgElements[1].replace("http://","", 1)
-    
+
         hostHeaderIndex = msgElements.index('Host:')
         webServer = msgElements[hostHeaderIndex+1]
 
@@ -41,23 +41,22 @@ def client_thread(clientFacingSocket):
         print("webServer:", webServer)
         print("resource:", resource)
 
-        message=message.replace("Connection: keep-alive","Connection: close")
-        
+        message=message.replace("Connection: keep-alive", "Connection: close")
+
         website_directory = cache_directory + webServer.replace("/",".") + "/"
 
         if not os.path.exists(website_directory):
             os.makedirs(website_directory)
-        
-        
+
         file_to_use = website_directory + resource.replace("/",".")
 
 
     except:
-        print(str(sys.exc_info()[0]))                                                
+        print(str(sys.exc_info()[0]))
         clientFacingSocket.close()
         return
-        
-    # Check wether the file exists in the cache
+
+    # Check whether the file exists in the cache
     try:
         with open(file_to_use, "rb") as f:
             # ProxyServer finds a cache hit and generates a response message
@@ -69,7 +68,7 @@ def client_thread(clientFacingSocket):
                 else:
                     break
 
-    except FileNotFoundError as e:            
+    except FileNotFoundError as e:
         try:        
             # Create a socket on the proxyserver
             serverFacingSocket = # Fill in start             # Fill in end
@@ -88,7 +87,7 @@ def client_thread(clientFacingSocket):
                     else:
                         break
         except:
-            print(str(sys.exc_info()[0]))                                                
+            print(str(sys.exc_info()[0]))
         finally:
             # Fill in start             # Fill in end
     except:
@@ -107,7 +106,7 @@ def main():
 
     if not os.path.exists(cache_directory):
         os.makedirs(cache_directory)
-        
+
     # Create a server socket, bind it to a port and start listening
     welcomeSocket = # Fill in start             # Fill in end
 
@@ -124,7 +123,7 @@ def main():
             # Start receiving data from the client
             clientFacingSocket, addr = #Fill in start             # Fill in end
             # print('Received a connection from:', addr)
-        
+
             # the following function starts a new thread, taking the function name as the first argument, and a tuple of arguments to the function as its second argument
             thread.start_new_thread(client_thread, (clientFacingSocket, ))
 
