@@ -10,7 +10,7 @@ cache_directory = "./cache/"
 
 
 def client_thread(client_facing_socket):
-    client_facing_socket.settimeout(5.0)
+    client_facing_socket.settimeout(30.0)
 
     try:
         message = client_facing_socket.recv(4096).decode()
@@ -81,28 +81,35 @@ def client_thread(client_facing_socket):
             )  # Fill in start             # Fill in end
             # Connect to the socket to port 80
             # Fill in start
-            server_facing_socket.connect(web_server, port)
+            server_facing_socket.connect((web_server, port))
             server_facing_socket.send(message.encode())
+
             # Fill in end
 
             with open(file_to_use, "wb") as cache_file:
-                while True:
-                    buff = server_facing_socket.recv(
-                        4096
-                    )  # Fill in start             # Fill in end
-                    if buff:
-                        # Fill in start
-                        cache_file.write(buff)
-                        client_facing_socket.send(buff)
-                        # Fill in end
-                    else:
-                        break
+                try:
+                    while True:
+                        buff = server_facing_socket.recv(
+                            4096
+                        )  # Fill in start             # Fill in end
+                        if buff:
+                            # Fill in start
+                            cache_file.write(buff)
+                            client_facing_socket.send(buff)
+                            # Fill in end
+                        else:
+                            break
+                except:
+                    print(str(sys.exc_info()[0]))
+
         except:
             print(str(sys.exc_info()[0]))
+
         finally:
             # Fill in start
             server_facing_socket.close()
             # Fill in end
+
     except:
         print(str(sys.exc_info()[0]))
 

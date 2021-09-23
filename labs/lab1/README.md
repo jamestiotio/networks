@@ -31,7 +31,7 @@ Note that after you put in the minimum code to make our simple proxy run, the pr
 
 Here are some questions you can think about when reading the RFC:
 
-- How the proxy should use the If􀀀None􀀀Match and ETag headers in the HTTP Request and Response respectively to decide its response to the client?
+- How the proxy should use the If-None-Match and ETag headers in the HTTP Request and Response respectively to decide its response to the client?
 - How to support HTTP Requests with the Range header?
 
 You are encouraged to think about how to add these features into our simple proxy code.
@@ -47,6 +47,6 @@ In addition, you are encouraged to try out the following software. They all prov
 - NGINX
   - [https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy/](https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy/)
 
-Some questions you can think about when trying the software: What are the main use cases of them, respectively? What are the benefits a web proxy can offer in the respective use cases? What are some different approaches that a proxy can take to handle Https connections?
+Some questions you can think about when trying the software: What are the main use cases of them, respectively? What are the benefits a web proxy can offer in the respective use cases? What are some different approaches that a proxy can take to handle HTTPS connections?
 
 If you explore some of the software listed above or implement any advanced features in your proxy, you are encouraged to summarize your findings in a separate write-up and submit that together with your proxy code. We will share selected submissions with your classmates.
