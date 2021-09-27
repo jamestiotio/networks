@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # SUTD 50.012 Networks Lab 1
 # James Raphael Tiovalen (1004555)
 
@@ -7,13 +8,15 @@ import _thread as thread
 
 proxy_port = 8079
 cache_directory = "./cache/"
+buf_size = 2 ** 30
+socket_timeout = 10.0
 
 
 def client_thread(client_facing_socket):
-    client_facing_socket.settimeout(30.0)
+    client_facing_socket.settimeout(socket_timeout)
 
     try:
-        message = client_facing_socket.recv(4096).decode()
+        message = client_facing_socket.recv(buf_size).decode()
         msg_elements = message.split()
 
         if (
@@ -21,7 +24,7 @@ def client_thread(client_facing_socket):
             or msg_elements[0].upper() != "GET"
             or "Range:" in msg_elements
         ):
-            print("Non-supported request: ", msg_elements)
+            # print("Non-supported request: ", msg_elements)
             client_facing_socket.close()
             return
 
@@ -35,12 +38,15 @@ def client_thread(client_facing_socket):
         #      User-Agent: .....
         #      Accept:  ......
 
-        resource = msg_elements[1].replace("http://", "", 1)
+        # Remove query parameters and trailing slashes from URL to create valid and safe/secure filenames
+        resource = (
+            msg_elements[1].replace("http://", "", 1).split("?", 1)[0].rstrip("/")
+        )
 
         host_header_index = msg_elements.index("Host:")
         web_server = msg_elements[host_header_index + 1]
 
-        port = 80
+        http_port = 80
 
         print("web_server: ", web_server)
         print("resource: ", resource)
@@ -65,7 +71,7 @@ def client_thread(client_facing_socket):
             # Proxy Server finds a cache hit and generates a response message
             print("served from the cache")
             while True:
-                buff = f.read(4096)
+                buff = f.read(buf_size)
                 if buff:
                     # Fill in start
                     client_facing_socket.send(buff)
@@ -81,7 +87,8 @@ def client_thread(client_facing_socket):
             )  # Fill in start             # Fill in end
             # Connect to the socket to port 80
             # Fill in start
-            server_facing_socket.connect((web_server, port))
+            server_facing_socket.settimeout(socket_timeout)
+            server_facing_socket.connect((web_server, http_port))
             server_facing_socket.send(message.encode())
 
             # Fill in end
@@ -90,7 +97,7 @@ def client_thread(client_facing_socket):
                 try:
                     while True:
                         buff = server_facing_socket.recv(
-                            4096
+                            buf_size
                         )  # Fill in start             # Fill in end
                         if buff:
                             # Fill in start

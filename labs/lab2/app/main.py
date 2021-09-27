@@ -1,7 +1,11 @@
-from fastapi import FastAPI, Response, Depends, File, UploadFile
+#!/usr/bin/env python3
+# SUTD 50.012 Networks Lab 2
+# James Raphael Tiovalen (1004555)
+
+from fastapi import FastAPI, Response, Depends
 from typing import Optional
-from pydantic import BaseModel
 import redis
+from models import Student
 
 app = FastAPI()
 
@@ -10,14 +14,6 @@ students = [
     {"name": "Bob", "id": "1004529", "gpa": 3.6},
     {"name": "Charlie", "id": "1004910", "gpa": 5.0},
 ]
-
-
-class Student(BaseModel):
-    name: str
-    id: str
-    gpa: Optional[float] = None
-    phone_number: Optional[int] = None
-    photo_file: Optional[UploadFile] = File(None, media_type="image/png")
 
 
 def get_redis_client():
