@@ -8,7 +8,7 @@ import _thread as thread
 
 proxy_port = 8079
 cache_directory = "./cache/"
-buf_size = 2 ** 30
+buf_size = 2 ** 10
 socket_timeout = 10.0
 
 
@@ -19,6 +19,7 @@ def client_thread(client_facing_socket):
         message = client_facing_socket.recv(buf_size).decode()
         msg_elements = message.split()
 
+        # Any content that requires HTTPS will not be able to be served/cached
         if (
             len(msg_elements) < 5
             or msg_elements[0].upper() != "GET"
