@@ -8,6 +8,8 @@ import _thread as thread
 
 proxy_port = 8079
 cache_directory = "./cache/"
+
+# Accessibility of the 4 websites is highly volatile and variable, depending on current networking configuration setup and status
 buf_size = 2 ** 10
 socket_timeout = 5.0
 
