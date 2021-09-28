@@ -9,7 +9,7 @@ import _thread as thread
 proxy_port = 8079
 cache_directory = "./cache/"
 buf_size = 2 ** 10
-socket_timeout = 10.0
+socket_timeout = 5.0
 
 
 def client_thread(client_facing_socket):
