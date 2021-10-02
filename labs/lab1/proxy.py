@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# SUTD 50.012 Networks Lab 1
+# SUTD 50.012 Networks Lab 1 (Socket Programming)
 # James Raphael Tiovalen (1004555)
 
 from socket import *
