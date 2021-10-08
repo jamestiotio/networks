@@ -1,0 +1,82 @@
+### Create a new character (missing compulsory fields will return a 422 error)
+POST http://127.0.0.1:8000/characters HTTP/1.1
+Content-Type: application/json
+
+{
+    "name": "James R T",
+    "password": "jamestiotio",
+    "id": 1004555,
+    "hp": 5000,
+    "level": 3,
+    "xp": 7500,
+    "kromers": 20000,
+    "dark_dollars": 2000,
+    "status_effects": [],
+    "owned_items": [],
+    "char_portrait": "",
+    "theme_music": "",
+    "description": "Just a regular student in SUTD."
+}
+
+### Create a new character
+POST http://127.0.0.1:8000/characters HTTP/1.1
+Content-Type: application/json
+
+{
+    "name": "Kris",
+    "password": "kris",
+    "id": 12,
+    "hp": 120,
+    "level": 2,
+    "xp": 0,
+    "kromers": 10000,
+    "dark_dollars": 2500,
+    "status_effects": [],
+    "owned_items": [],
+    "char_portrait": "",
+    "theme_music": "",
+    "description": "Doesn't like to listen to the beat in their heart."
+}
+
+### Create a new character
+POST http://127.0.0.1:8000/characters HTTP/1.1
+Content-Type: application/json
+
+{
+    "name": "Frisk",
+    "password": "frisk",
+    "id": 7,
+    "hp": 20,
+    "level": 1,
+    "xp": 0,
+    "kromers": 0,
+    "dark_dollars": 0,
+    "status_effects": [],
+    "owned_items": [],
+    "char_portrait": "",
+    "theme_music": "",
+    "description": "Love, hopes, and dreams."
+}
+
+### Create a new character
+POST http://127.0.0.1:8000/characters HTTP/1.1
+Content-Type: application/json
+
+{
+    "name": "Sans",
+    "password": "ness",
+    "id": 999,
+    "hp": 1,
+    "level": 69,
+    "xp": 1,
+    "kromers": 1,
+    "dark_dollars": 1,
+    "status_effects": [],
+    "owned_items": [],
+    "char_portrait": "",
+    "theme_music": "",
+    "description": "Likes a good time with friends, family, and food."
+}
+
+### To check that all characters have been created
+GET http://127.0.0.1:8000/characters HTTP/1.1

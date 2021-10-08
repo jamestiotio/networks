@@ -1,0 +1,17 @@
+### Retrieve all characters
+GET http://127.0.0.1:8000/characters HTTP/1.1
+
+### Retrieve a character by ID
+GET http://127.0.0.1:8000/characters/1004555 HTTP/1.1
+
+### Retrieve a limited number of characters
+GET http://127.0.0.1:8000/characters?count=3 HTTP/1.1
+
+### Retrieve characters sorted by level in ascending order
+GET http://127.0.0.1:8000/characters?sortBy=level HTTP/1.1
+
+### Retrieve characters with a front offset in terms of ID
+GET http://127.0.0.1:8000/characters?offset=1 HTTP/1.1
+
+### Retrieve 3 characters, sorted by level and offset by 1 
+GET http://127.0.0.1:8000/characters?count=3&offset=1&sortBy=level HTTP/1.1

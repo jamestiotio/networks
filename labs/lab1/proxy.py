@@ -130,6 +130,7 @@ def client_thread(client_facing_socket):
 
 
 def main():
+    global proxy_port
     if len(sys.argv) > 2:
         print('Usage: "python proxy.py port_number"\n')
         sys.exit(2)

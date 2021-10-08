@@ -1,2 +1,5 @@
 fastapi
 redis
+aiofiles
+python-multipart
+starlette
