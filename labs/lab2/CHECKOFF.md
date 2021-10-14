@@ -50,15 +50,15 @@ All of these endpoints under this section require authorization to identify the 
 
 1. `/weapons`
 
-Buy offensive weapons to attack enemies.
+Buy offensive weapons to attack enemies. The item prices might vary and change randomly across time.
 
 2. `/armors`
 
-Buy defensive armors to protect yourself.
+Buy defensive armors to protect yourself. The item prices might vary and change randomly across time.
 
 3. `/spells`
 
-Buy magic spells to cast special effects.
+Buy magic spells to cast special effects. The item prices might vary and change randomly across time.
 
 4. `/kromers`
 
