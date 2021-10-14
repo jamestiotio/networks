@@ -5,10 +5,11 @@ RECEIVER_LISTEN_PORT = 8081
 # Parameters for unreliable network.
 BIT_ERROR_PROB = 0.1
 MSG_LOST_PROB = 0.1
+RTT_MSEC = 100
 
 # Parameters for transport protocols.
-TIMEOUT_MSEC = 100
-WINDOW_SIZE = 10
+TIMEOUT_MSEC = 150
+WINDOW_SIZE = 20
 
 # Packet size for network layer.
 MAX_SEGMENT_SIZE = 512
