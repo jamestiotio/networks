@@ -32,6 +32,7 @@ if __name__ == "__main__":
             functools.partial(msg_handler, file_handle),
         )
         while True:
+            # Might want to consider using threading.Event() instead...
             time.sleep(1)
     except KeyboardInterrupt:
         print("Bye...")
