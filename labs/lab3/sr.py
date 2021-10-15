@@ -70,6 +70,13 @@ class SelectiveRepeat:
         msg_data = util.extract_data(msg)
 
         if msg_data.is_corrupt:
+            if self.is_receiver:
+                util.log(
+                    "Packet message received is corrupted: "
+                    + util.pkt_to_string(msg_data)
+                    + ". Waiting for timeout..."
+                )
+                return
             return
 
         # If ACK message, assume it's for sender
@@ -148,7 +155,7 @@ class SelectiveRepeat:
         self.network_layer.shutdown()
 
     def _wait_for_last_ACK(self):
-        while self.sender_base < self.next_sequence_number - 1:
+        while self.sender_base <= self.next_sequence_number - 1:
             util.log(
                 "Waiting for last ACK from receiver with sequence # "
                 + str(int(self.next_sequence_number - 1))

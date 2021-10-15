@@ -11,7 +11,7 @@ def msg_handler(msg):
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
-        print("Usage: python demo_receiver.py [dummy|ss|gbn]")
+        print("Usage: python demo_receiver.py [dummy|ss|gbn|sr]")
         sys.exit(1)
 
     transport_layer = None

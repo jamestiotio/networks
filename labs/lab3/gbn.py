@@ -132,7 +132,7 @@ class GoBackN:
         self.network_layer.shutdown()
 
     def _wait_for_last_ACK(self):
-        while self.sender_base < self.next_sequence_number - 1:
+        while self.sender_base <= self.next_sequence_number - 1:
             util.log(
                 "Waiting for last ACK from receiver with sequence # "
                 + str(int(self.next_sequence_number - 1))

@@ -8,7 +8,7 @@ import util
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print("Usage: python file_sender.py [dummy|ss|gbn] [file_name]")
+        print("Usage: python file_sender.py [dummy|ss|gbn|sr] [file_name]")
         sys.exit(1)
 
     transport_layer = None
