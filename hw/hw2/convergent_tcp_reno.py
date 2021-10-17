@@ -14,23 +14,22 @@ print("CONVERGENT MAXIMUM CWND VALUES\n")
 ### Question 5.3
 for _ in range(N):
     if c1 + c2 >= cutoff:
+        # We pick only the maximum cwnd values and see how they settle/converge
+        c1_max, c2_max = c1, c2
         c1, c2 = c1 / 2, c2 / 2
     else:
         c1 += increase
         c2 += increase
 
-# If we settle at a non-maximum cwnd value, add until we reach the maximum value
-while c1 + c2 < cutoff:
-    c1 += increase
-    c2 += increase
+assert c1_max + c2_max == cutoff
 
-assert c1 + c2 == cutoff
-
-print(f"QUESTION 5.3:\n- Connection 1: {c1} KB\n- Connection 2: {c2} KB\n")
+print(f"QUESTION 5.3:\n- Connection 1: {c1_max} KB\n- Connection 2: {c2_max} KB\n")
 
 ### Question 5.4
 for i in range(N):
     if c1 + c2 >= cutoff:
+        # We pick only the maximum cwnd values and see how they settle/converge
+        c1_max, c2_max = c1, c2
         c1, c2 = c1 / 2, c2 / 2
     else:
         c1 += increase
@@ -40,16 +39,6 @@ for i in range(N):
         if i % 2 == 0:
             c2 += increase
 
-    x = i
+assert c1_max + c2_max == cutoff
 
-# If we settle at a non-maximum cwnd value, add until we reach the maximum value
-while c1 + c2 < cutoff:
-    c1 += increase
-    # This line should follow accordingly (the same as the rule specified previously), although I doubt it actually matters
-    if x % 2 == 0:
-        c2 += increase
-    x += 1
-
-assert c1 + c2 == cutoff
-
-print(f"QUESTION 5.4:\n- Connection 1: {c1} KB\n- Connection 2: {c2} KB\n")
+print(f"QUESTION 5.4:\n- Connection 1: {c1_max} KB\n- Connection 2: {c2_max} KB\n")
