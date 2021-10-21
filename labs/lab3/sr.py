@@ -46,6 +46,7 @@ class SelectiveRepeat:
     # Helper fn for thread to send the next packet
     def _send_helper(self, msg):
         self.sender_lock.acquire()
+        # Maximum largest file size is (2 ** 16) * 500 bytes large (if we are using an integer as a sequence number)
         packet = util.make_packet(msg, config.MSG_TYPE_DATA, self.next_sequence_number)
         packet_data = util.extract_data(packet)
         util.log("Sending data: " + util.pkt_to_string(packet_data))
@@ -137,6 +138,7 @@ class SelectiveRepeat:
                         self.rcv_buffer = self.rcv_buffer[1:] + [b""]
                         util.log(f"Updated rcv_base to {self.receiver_base}.")
 
+            # This is needed because generated ACKs might be lost in the network (to ensure that the sender's window keeps up with the receiver's window)
             elif msg_data.seq_num < self.receiver_base:
                 self.network_layer.send(ack_pkt)
                 util.log("Packet received outside the current receiver's window.")

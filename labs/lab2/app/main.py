@@ -15,13 +15,14 @@ from models import BatchCharDelete, Character
 app = FastAPI()
 
 
+# Need to seed database with some initial data points/values
 def get_redis_client():
     return redis.Redis(host="redis")
 
 
 def get_all_character_ids(redis_client):
     all_character_ids = redis_client.smembers("/character/ids")
-    all_character_ids = [int(x.decode('utf-8')) for x in all_character_ids]
+    all_character_ids = [int(x.decode("utf-8")) for x in all_character_ids]
     return all_character_ids
 
 
@@ -33,13 +34,23 @@ async def read_root(redis_client: redis.Redis = Depends(get_redis_client)):
     else:
         return "HI THERE ! WELCOME TO MY SHOP, my [esteem customer]!! IT'S ME, PHOTRON X. PHOTRON! EV3RY1'S FAVORITE [[Number 2 Rated Salesman2021]]"
 
+
 @app.get("/fortunes")
 async def get_fortune():
-    output = subprocess.run(["/usr/games/fortune"], shell=True, capture_output=True, universal_newlines=True)
+    output = subprocess.run(
+        ["/usr/games/fortune"], shell=True, capture_output=True, universal_newlines=True
+    )
     return output.stdout.strip()
 
+
 @app.get("/characters")
-async def get_characters(response: Response, redis_client: redis.Redis = Depends(get_redis_client), sortBy: Optional[str] = None, count: Optional[int] = None, offset: Optional[int] = None):
+async def get_characters(
+    response: Response,
+    redis_client: redis.Redis = Depends(get_redis_client),
+    sortBy: Optional[str] = None,
+    count: Optional[int] = None,
+    offset: Optional[int] = None,
+):
     all_character_ids = get_all_character_ids(redis_client)
     character_collection = []
     for character_id in all_character_ids:
@@ -76,7 +87,11 @@ async def get_characters(response: Response, redis_client: redis.Redis = Depends
 
 
 @app.get("/characters/{character_id}")
-async def find_character(character_id: int, response: Response, redis_client: redis.Redis = Depends(get_redis_client)):
+async def find_character(
+    character_id: int,
+    response: Response,
+    redis_client: redis.Redis = Depends(get_redis_client),
+):
     all_character_ids = get_all_character_ids(redis_client)
 
     if character_id in all_character_ids:
@@ -90,7 +105,9 @@ async def find_character(character_id: int, response: Response, redis_client: re
 
 @app.post("/characters")
 async def create_character(
-    character: Character, response: Response, redis_client: redis.Redis = Depends(get_redis_client)
+    character: Character,
+    response: Response,
+    redis_client: redis.Redis = Depends(get_redis_client),
 ):
     all_character_ids = get_all_character_ids(redis_client)
     if character.id in all_character_ids:
@@ -104,7 +121,12 @@ async def create_character(
 
 
 @app.delete("/characters/{character_id}")
-async def delete_character(character_id: int, response: Response, password: Optional[str] = Header(None), redis_client: redis.Redis = Depends(get_redis_client)):
+async def delete_character(
+    character_id: int,
+    response: Response,
+    password: Optional[str] = Header(None),
+    redis_client: redis.Redis = Depends(get_redis_client),
+):
     all_character_ids = get_all_character_ids(redis_client)
     character_collection = []
     for id in all_character_ids:
@@ -128,7 +150,12 @@ async def delete_character(character_id: int, response: Response, password: Opti
 
 
 @app.delete("/characters_batch")
-async def delete_multiple_characters_within_levels(response: Response, info: BatchCharDelete, password: Optional[str] = Header(None), redis_client: redis.Redis = Depends(get_redis_client)):
+async def delete_multiple_characters_within_levels(
+    response: Response,
+    info: BatchCharDelete,
+    password: Optional[str] = Header(None),
+    redis_client: redis.Redis = Depends(get_redis_client),
+):
     all_character_ids = get_all_character_ids(redis_client)
     character_collection = []
     for character_id in all_character_ids:
@@ -152,7 +179,7 @@ async def delete_multiple_characters_within_levels(response: Response, info: Bat
 
         response.status_code = 200
         return "MULTIPLE CHARACTERS HAVE BEEN REMOVED FROM EXISTENCE! [are you happy now!?!?]"
-    
+
     else:
         response.status_code = 401
         return "UNAUTHORIZED ACCESS DETECTED! YOU ARE ACTUALLY NOT AN [esteemed customer]!! DEPART FROM HERE!"

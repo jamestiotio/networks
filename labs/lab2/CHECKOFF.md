@@ -14,7 +14,7 @@ Simply change/set your current directory to the directory where this [`CHECKOFF.
 
 ## Endpoints Documentation
 
-This is the list of endpoints provided in this REST API, as well as how to use them and their expected responses, categorized by their corresponding methods.
+This is the list of endpoints (resource representations) provided in this REST API, as well as how to use them and their expected responses, categorized by their corresponding methods.
 
 ### GET
 
@@ -46,7 +46,7 @@ Get some juicy lore about Photron. If you are authorized, perhaps you can learn 
 
 ### POST
 
-All of these endpoints under this section require authorization to identify the player's current character.
+All of these endpoints under this section require authorization to identify the player's current character. Full original lists of items are immutable in the database, by default.
 
 1. `/weapons`
 
@@ -74,11 +74,15 @@ Add or create new characters. While POST requests are generally non-idempotent, 
 
 ### PUT
 
-All of these endpoints under this section are idempotent.
+All of these endpoints under this section are idempotent. The entire full objects need to be sent, by convention. These endpoints also allow creation, instead of inserting, if the object does not yet exist.
 
 1. `/characters/{character_id}`
 
 Update your character's details.
+
+### PATCH
+
+All of these endpoints under this section are idempotent. These endpoints allow partial updates. If object does not exist, no updates are allowed.
 
 ### DELETE
 
