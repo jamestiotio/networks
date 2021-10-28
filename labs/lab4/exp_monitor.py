@@ -24,7 +24,9 @@ args = parser.parse_args()
 def start_tcpprobe():
     "Install tcp_probe module and dump to file"
     os.system("(rmmod tcp_probe >/dev/null 2>&1); modprobe tcp_probe full=1;")
+    # os.system("cd ./tcp_reno_verbose/ && make && sudo make install && ./load_module.sh;")
     print("Monitoring TCP CWND ... will save it to ./%s_tcpprobe.txt " % args.exp)
+    # Popen("su root && cat /sys/kernel/debug/tracing/trace > ./%s_tcpprobe.txt" % args.exp, shell=True)
     Popen("cat /proc/net/tcpprobe > ./%s_tcpprobe.txt" % args.exp, shell=True)
 
 

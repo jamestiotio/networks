@@ -1,8 +1,8 @@
-import SimpleHTTPServer
-import SocketServer
+import http.server
+import socketserver
 
-class CS144Handler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
+class CS144Handler(http.server.SimpleHTTPRequestHandler):
     # Disable logging DNS lookups
     def address_string(self):
         return str(self.client_address[0])
@@ -11,6 +11,6 @@ class CS144Handler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 PORT = 80
 
 Handler = CS144Handler
-httpd = SocketServer.TCPServer(("", PORT), Handler)
-print "Server1: httpd serving at port", PORT
+httpd = socketserver.TCPServer(("", PORT), Handler)
+print("Server1: httpd serving at port", PORT)
 httpd.serve_forever()
