@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Demonstration of convergent and stable TCP Reno behavior for Homework 2 Question 5.3 & 5.4
+# Demonstration of convergent and stable TCP Reno sawtooth behavior for Homework 2 Question 5.3 & 5.4
 # James Raphael Tiovalen (1004555)
 
 N = 10000000
