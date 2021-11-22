@@ -82,7 +82,7 @@ Update your character's details.
 
 ### PATCH
 
-All of these endpoints under this section are idempotent. These endpoints allow partial updates. If object does not exist, no updates are allowed.
+All of these endpoints under this section are idempotent. These endpoints allow partial updates. If the object does not exist, no updates are allowed.
 
 ### DELETE
 
@@ -111,3 +111,5 @@ Delete all characters within the specified `min_level` and `max_level` level lim
 ## Extra Discussion (Possible Future Improvements)
 
 Currently, creating a character takes `O(n)` computing time since we loop through the existing character IDs to check that the input character ID is not a duplicate. For future improvement, we can actually use the `SISMEMBER` command to check if the character ID exists in the existing character IDs set which has a time complexity of `O(1)`. Thus, we can improve the current time needed to create a character.
+
+In terms of scalability, some form of caching (whether locally in the user's browser or by using Content Delivery Network services) can be integrated for the GET endpoints such that for a large webserver with multiple, parallel, concurrent, asynchronous requests, content can be served relatively quickly. However, caching should not be allowed at all for POST, PUT, PATCH, and DELETE endpoints, since those endpoints are not safe (i.e., they modify content in the database or alter the server state).
