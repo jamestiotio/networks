@@ -143,8 +143,10 @@ def main():
     for router in net.switches:
         if router.name == ROGUE_AS_NAME and not FLAGS_rogue_as:
             continue
+        # Might want to change to /usr/sbin/zebra if an error is encountered
         router.cmd("/usr/lib/quagga/zebra -f /etc/quagga/zebra-%s.conf -d -i /tmp/zebra-%s.pid > logs/%s-zebra-stdout 2>&1" % (router.name, router.name, router.name))
         router.waitOutput()
+        # Might want to change to /usr/sbin/bgpd if an error is encountered
         router.cmd("/usr/lib/quagga/bgpd -f /etc/quagga/bgpd-%s.conf -d -i /tmp/bgp-%s.pid > logs/%s-bgpd-sthout 2>&1" % (router.name, router.name, router.name), shell=True)
         router.waitOutput()
         log("Starting zebra and bgpd on %s" % router.name)

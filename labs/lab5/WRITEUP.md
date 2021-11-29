@@ -67,7 +67,7 @@ IP addresses of all routers:
 <td align="center">9.0.1.1</td>
 </tr>
 <tr>
-<td align="center" rowspan="5">R3</td>
+<td align="center" rowspan="4">R3</td>
 <td align="center">R3-eth1</td>
 <td align="center">13.0.1.254</td>
 </tr>
@@ -82,6 +82,24 @@ IP addresses of all routers:
 <tr>
 <td align="center">R3-eth4</td>
 <td align="center">9.0.1.2</td>
+</tr>
+<br />
+<tr>
+<td align="center" rowspan="4">R4</td>
+<td align="center">R4-eth1</td>
+<td align="center">13.0.1.254</td>
+</tr>
+<tr>
+<td align="center">R4-eth2</td>
+<td align="center">13.0.2.254</td>
+</tr>
+<tr>
+<td align="center">R4-eth3</td>
+<td align="center">13.0.3.254</td>
+</tr>
+<tr>
+<td align="center">R4-eth4</td>
+<td align="center">9.0.4.2</td>
 </tr>
 </tbody>
 </table>
@@ -146,12 +164,31 @@ Hosts/IPs in the ASes:
 <td align="center">h33-eth0</td>
 <td align="center">13.0.3.1</td>
 </tr>
+<tr>
+<td align="center" rowspan="3">AS4</td>
+<td align="center">h41</td>
+<td align="center">h41-eth0</td>
+<td align="center">13.0.1.1</td>
+</tr>
+<tr>
+<td align="center">h42</td>
+<td align="center">h42-eth0</td>
+<td align="center">13.0.2.1</td>
+</tr>
+<tr>
+<td align="center">h43</td>
+<td align="center">h43-eth0</td>
+<td align="center">13.0.3.1</td>
+</tr>
 </tbody>
 </table>
 
 Topology Diagram:
 
-![Topology Diagram](./assets/topology.png)
+<p align="center">
+  <!-- In Obsidian, since HTML with relative path is not supported on Electron yet (https://github.com/electron/electron/pull/24849), use src="app://local/C://path/to/image/file" on Windows (https://forum.obsidian.md/t/allow-embed-of-local-images-using-file/1990/4) -->
+  <img width="420px" src="./assets/topology.png">
+</p>
 
 ### BGP Traffic
 
@@ -170,3 +207,13 @@ However, R1 cannot reach h31 and h33 because R1's IP addresses are not considere
 In order for R1 to be able to reach h31 and h33 (or any host in AS3, for that matter), R2 has to advertise that it can reach both routers as hosts. This can be done by adding the `9.0.0.0/8` subnet to R2's advertisement messages, so that the BGP protocol will recognize `R1-eth4` and `R3-eth4` as hosts that can be reached. Once this is added, hosts in AS3 can reach R1 and hosts in AS1 can reach R3.
 
 ### BGP Attack
+
+Before the attack was executed, h11 continuously contacts a webserver on 13.0.1.1 from R1. This can be seen from the TCP and HTTP data packets captured on Wireshark flowing to and from `9.0.0.1` and `13.0.1.1`, as well as the usual periodic BGP KEEPALIVE messages between `9.0.0.1` (R1) and `9.0.0.2` (R2). The `website.sh` script also reflects that h11 is connecting to the default web server, and we can deduce that this webserver originates from h31 (`13.0.1.1`) in AS3 since the packets reveal that the `R1-eth4` interface (`9.0.0.1`) is interacting with the webserver.
+
+To execute the BGP spoofing/hijacking attack, we modify the `network 14.0.0.0/8` line in the `bgpd-R4.conf` file to `network 13.0.0.0/8`.
+
+After the attack started (by executing the `start_rogue.sh` script), a TCP connection consisting of several TCP and BGP OPEN packets between `9.0.4.1` and `9.0.4.2` was established. Soon after, several BGP UPDATE packets were sent between `9.0.4.1` and `9.0.4.2`, after which, data packets between `9.0.0.1` and `13.0.1.1` stop being transmitted/transferred, while data packets between `9.0.4.1` and `13.0.1.1` start flowing. The BGP KEEPALIVE messages now indicate that there is a connection between `9.0.0.1` and `9.0.0.2`, as well as between `9.0.4.1` and `9.0.4.2`. The `website.sh` script also reflects that h11 is connecting to the attacker web server, and we deduce that this webserver originates from h41 in AS4 since the packets reveal that the `R1-eth5` interface (`9.0.4.1`) is interacting with the webserver.
+
+The fact that h11 prefers to contact the webserver from AS4 instead of from AS4 possibly suggests that this path has a lower traversal cost.
+
+After the attack was stopped (by executing the `stop_rogue.sh` script), several TCP packets were sent between `9.0.4.1` and `9.0.4.2` to close the TCP connection, after which several BGP UPDATE packets were sent between `9.0.0.1` and `9.0.0.2`, and then the traffic was restored back to normal (i.e., h11 would contact the default web server in AS3 once more).
